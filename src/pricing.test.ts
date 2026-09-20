@@ -41,15 +41,26 @@ test("prices Jev on input tokens only", () => {
   assert.equal(estimateJevCostUsd(0), 0);
 });
 
-test("prices the decomposer at the fast tier with cached tokens discounted", () => {
-  const cost = estimateDecomposerCostUsd({
-    model: "gpt-5.6-luna",
-    calls: 1,
-    inputTokens: 1_000_000,
-    cachedInputTokens: 400_000,
-    outputTokens: 100_000,
-  });
-  assert.ok(cost !== undefined);
-  const expected = (600_000 * 0.2 + 400_000 * 0.02 + 100_000 * 1.2) * 2;
-  assert.ok(Math.abs(cost - expected / 1_000_000) < 1e-9);
+test("passes through the decomposer's SDK-reported cost", () => {
+  assert.equal(
+    estimateDecomposerCostUsd({
+      model: "haiku",
+      calls: 1,
+      inputTokens: 1_000_000,
+      cachedInputTokens: 400_000,
+      outputTokens: 100_000,
+      costUsd: 0.0123,
+    }),
+    0.0123,
+  );
+  assert.equal(
+    estimateDecomposerCostUsd({
+      model: "haiku",
+      calls: 1,
+      inputTokens: 0,
+      cachedInputTokens: 0,
+      outputTokens: 0,
+    }),
+    undefined,
+  );
 });

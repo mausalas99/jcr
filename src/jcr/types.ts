@@ -98,6 +98,7 @@ export type JcrDecomposerMetrics = {
   inputTokens: number;
   cachedInputTokens: number;
   outputTokens: number;
+  costUsd?: number;
 };
 
 export type JcrMetrics = {

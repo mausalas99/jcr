@@ -1,5 +1,4 @@
 import type { TokenUsage } from "./harnesses/types.js";
-import { decomposerServiceTier } from "./jcr/decompose.js";
 import type { JcrDecomposerMetrics } from "./jcr/types.js";
 
 export type CostBasis = "sdk" | "list-price";
@@ -68,20 +67,7 @@ export const estimateJevCostUsd = (inputTokens: number): number =>
 
 export const estimateDecomposerCostUsd = (
   decomposer: JcrDecomposerMetrics,
-): number | undefined =>
-  estimateOpenAiCostUsd(
-    decomposer.model,
-    {
-      inputTokens: Math.max(
-        0,
-        decomposer.inputTokens - decomposer.cachedInputTokens,
-      ),
-      cachedInputTokens: decomposer.cachedInputTokens,
-      cacheWriteInputTokens: 0,
-      outputTokens: decomposer.outputTokens,
-    },
-    decomposerServiceTier,
-  );
+): number | undefined => decomposer.costUsd;
 
 export const describeListPrice = (model: string): string | undefined => {
   const price = openAiListPrice(model);

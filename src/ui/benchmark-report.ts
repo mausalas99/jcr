@@ -6,13 +6,11 @@ import type {
   VariantAggregate,
 } from "../bench/types.js";
 import { aggregateRuns, isCosted } from "../bench/results.js";
-import { decomposerServiceTier } from "../jcr/decompose.js";
 import type { CapabilityMode } from "../jcr/types.js";
 import {
   describeListPrice,
   jevInputPricePerMillion,
   pricingCheckedOn,
-  serviceTierMultiplier,
 } from "../pricing.js";
 import {
   boxBorder,
@@ -629,7 +627,7 @@ const costBasis = (width: number, runs: BenchRun[]): string[] => {
       }),
     ),
   ];
-  const listedModels = [...new Set([...codexModels, ...decomposerModels])];
+  const listedModels = [...new Set(codexModels)];
   return [
     border("├", "┤", width, "COST BASIS"),
     ...(providers.has("claude")
@@ -660,7 +658,7 @@ const costBasis = (width: number, runs: BenchRun[]): string[] => {
           summaryRow(
             width,
             "Decomposer",
-            `${decomposerModels.join(", ")} · ${decomposerServiceTier} tier (${serviceTierMultiplier[decomposerServiceTier]}× list price)`,
+            `${decomposerModels.join(", ")} · Claude Agent SDK total_cost_usd (list price)`,
           ),
         ]
       : []),
