@@ -56,7 +56,12 @@ export const decomposeRequest = async (
       allowedTools: [],
       settingSources: [],
       maxTurns: 1,
-      permissionMode: "bypassPermissions",
+      // No tools are reachable here (tools/allowedTools are both empty), so
+      // bypassPermissions has no effect on behavior. It does have a cost:
+      // the Claude Agent SDK's spawned CLI refuses to start in that mode
+      // when running as root outside a declared sandbox (cloud threads run
+      // as root), which broke every resolve_capabilities call there.
+      permissionMode: "default",
     },
   })) {
     if (message.type === "result") {
